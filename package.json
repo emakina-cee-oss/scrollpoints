@@ -1,0 +1,16 @@
+{
+  "name": "Scrollpoints.js",
+  "version": "0.0.0",
+  "description": "Scroll callbacks for DOM Elements",
+  "main": "scrollpoints.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-watch": "~0.5.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
