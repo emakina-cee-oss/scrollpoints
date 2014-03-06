@@ -45,24 +45,24 @@ Scrollpoints = (function (undefined) {
     };
 
 
-    var entering = function (e, reversed, offset) {
-        if (reversed) return !e.done && windowTopPos() < elementEnd(e.element) - offset;
-        return !e.done && windowBottomPos() > elementBegin(e.element) + offset;
+    var entering = function (e) {
+        if (e.reversed) return !e.done && windowTopPos() < elementEnd(e.element) - e.offset;
+        return !e.done && windowBottomPos() > elementBegin(e.element) + e.offset;
     };
 
-    var entered = function (e, reversed, offset) {
-        if (reversed) return !e.done && windowTopPos() < elementBegin(e.element) - offset;
-        return !e.done && windowBottomPos() > elementEnd(e.element) + offset;
+    var entered = function (e) {
+        if (e.reversed) return !e.done && windowTopPos() < elementBegin(e.element) - e.offset;
+        return !e.done && windowBottomPos() > elementEnd(e.element) + e.offset;
     };
 
-    var leaving = function (e, reversed, offset) {
-        if (reversed) return !e.done && windowBottomPos() < elementEnd(e.element) - offset;
-        return !e.done && windowTopPos() > elementBegin(e.element) + offset;
+    var leaving = function (e) {
+        if (e.reversed) return !e.done && windowBottomPos() < elementEnd(e.element) - e.offset;
+        return !e.done && windowTopPos() > elementBegin(e.element) + e.offset;
     };
 
-    var left = function (e, reversed, offset) {
-        if (reversed) return !e.done && windowBottomPos() < elementBegin(e.element) - offset;
-        return !e.done && windowTopPos() > elementEnd(e.element) + offset;
+    var left = function (e) {
+        if (e.reversed) return !e.done && windowBottomPos() < elementBegin(e.element) - e.offset;
+        return !e.done && windowTopPos() > elementEnd(e.element) + e.offset;
     };
 
 
@@ -73,8 +73,6 @@ Scrollpoints = (function (undefined) {
         // enter the screen the first time, because when detected as not on viewport, leave functions
         // fire immediately.
         var activeInitially = (opts.when === 'entered' || opts.when === 'entering') ? true : false;
-
-        console.log(activeInitially);
 
         elements.push({
             element: domElement,
@@ -94,14 +92,14 @@ Scrollpoints = (function (undefined) {
     window.addEventListener('scroll', function () {
         elements.forEach(function (elem, index, array) {
 
-            if ((elem.when === 'leaving' || elem.when === 'left') && (entered(elem, false, elem.offset))) {
+            if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && (entered(elem))) {
                 elem.active = true;
             }
 
-            var shouldFire =    elem.when === 'entered' && entered(elem, elem.reversed, elem.offset) || 
-                                elem.when === 'entering' && entering(elem, elem.reversed, elem.offset) || 
-                                elem.when === 'leaving' && leaving(elem, elem.reversed, elem.offset) || 
-                                elem.when === 'left' && left(elem, elem.reversed, elem.offset);
+            var shouldFire =    elem.when === 'entered' && entered(elem) || 
+                                elem.when === 'entering' && entering(elem) || 
+                                elem.when === 'leaving' && leaving(elem) || 
+                                elem.when === 'left' && left(elem);
 
             if (elem.active && shouldFire) {
                 elem.callback.call(window, elem.element);
