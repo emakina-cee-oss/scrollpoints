@@ -50,8 +50,12 @@ Scrollpoints = (function (undefined) {
         return !e.done && windowBottomPos() > elementBegin(e.element) + e.offset;
     };
 
-    var entered = function (e) {
-        if (e.reversed) return !e.done && windowTopPos() < elementBegin(e.element) - e.offset;
+    var entered = function (e, overrideReversed) {
+
+        // reversed can be overridden to check if a leaving+reversed element entered non-reverse.
+        var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
+
+        if (reversed) return !e.done && windowTopPos() < elementBegin(e.element) - e.offset;
         return !e.done && windowBottomPos() > elementEnd(e.element) + e.offset;
     };
 
@@ -92,7 +96,7 @@ Scrollpoints = (function (undefined) {
     window.addEventListener('scroll', function () {
         elements.forEach(function (elem, index, array) {
 
-            if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && (entered(elem))) {
+            if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && (entered(elem, !elem.reversed))) {
                 elem.active = true;
             }
 
