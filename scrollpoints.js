@@ -1,27 +1,25 @@
 Scrollpoints = (function (undefined) {
 
     var exports = {};
-    
-    var body = document.body;
-    var viewportHeight = window.innerHeight;
-    var elements = [];
-    var options = {
+    var scrollpoints = [];
+
+    var defaultOptions = {
         once: true,
         reversed: false,
         when: 'entered', // 'entered', 'entering', 'left', 'leaving'
         offset: 0
     };
 
-
     var extendOptions = function (userOptions) {
         if (userOptions === undefined) {
             userOptions = {};
         }
         var combined = {};
-        for (var key in options) {
-            combined[key] = options[key];
+        for (var key in defaultOptions) {
             if (userOptions.hasOwnProperty(key)) {
                 combined[key] = userOptions[key];
+            } else {
+                combined[key] = defaultOptions[key];
             }
         }
         return combined;
@@ -52,7 +50,6 @@ Scrollpoints = (function (undefined) {
 
     var entered = function (e, overrideReversed) {
 
-        // reversed can be overridden to check if a leaving+reversed element entered non-reverse.
         var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
 
         if (reversed) return !e.done && windowTopPos() < elementBegin(e.element) - e.offset;
@@ -64,8 +61,11 @@ Scrollpoints = (function (undefined) {
         return !e.done && windowTopPos() > elementBegin(e.element) + e.offset;
     };
 
-    var left = function (e) {
-        if (e.reversed) return !e.done && windowBottomPos() < elementBegin(e.element) - e.offset;
+    var left = function (e, overrideReversed, real) {
+
+        var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
+
+        if (reversed) return !e.done && windowBottomPos() < elementBegin(e.element) - e.offset;
         return !e.done && windowTopPos() > elementEnd(e.element) + e.offset;
     };
 
@@ -73,12 +73,16 @@ Scrollpoints = (function (undefined) {
     exports.add = function (domElement, callback, options) {
         var opts = extendOptions(options);
         
-        // scrollpoints which trigger functions on 'leave' or 'leaving' will be activated when they
-        // enter the screen the first time, because when detected as not on viewport, leave functions
-        // fire immediately.
-        var activeInitially = (opts.when === 'entered' || opts.when === 'entering') ? true : false;
+        // reversed elements are inactive initially. Scrollpoints which trigger on 'left' or 'leave' will
+        // be activated once they entered the screen, those who trigger on 'entered' or 'entering' once they left the screen.
+        var activeInitially = true;
 
-        elements.push({
+        if ((opts.when === 'entered' || opts.when === 'entering') && opts.reversed ||
+            (opts.when === 'left' || opts.when === 'leaving') && opts.reversed) {
+            activeInitially = false;
+        }
+
+        scrollpoints.push({
             element: domElement,
             callback: callback,
 
@@ -88,15 +92,15 @@ Scrollpoints = (function (undefined) {
             offset: opts.offset,
 
             active: activeInitially, 
-
             done: false
         });
     };
 
     window.addEventListener('scroll', function () {
-        elements.forEach(function (elem, index, array) {
+        scrollpoints.forEach(function (elem, index, array) {
 
-            if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && (entered(elem, !elem.reversed))) {
+            if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && entered(elem, false) ||
+                !elem.active && (elem.when === 'entering' || elem.when === 'entered') && left(elem, false)) {
                 elem.active = true;
             }
 
