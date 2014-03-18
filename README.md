@@ -80,3 +80,18 @@ when the element entered the screen and the lower edge of the element has a 200p
 distance from the bottom of the browser window. Think of this property as *"a specific
 amount of pixels too late"*. When an offset is set on a `leaving` element, it means that
 the callback will fire when the element is already `x` pixels out of the screen.
+
+### Overriding defaults
+
+Scrollpoints provides a `configure` function to set the defaults for every new
+Scrollpoint.
+
+Every Scrollpoint you create after this call will not only fire once, and will always
+fire 50px before the actual point.
+
+```javascript
+Scrollpoints.configure({
+    once: false,
+    offset: -50
+});
+```

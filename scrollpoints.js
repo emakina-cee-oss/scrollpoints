@@ -25,7 +25,6 @@ Scrollpoints = (function (undefined) {
         return combined;
     };
 
-
     var elementBegin = function (domElement) {
         return domElement.offsetTop;
     };
@@ -95,6 +94,11 @@ Scrollpoints = (function (undefined) {
             done: false
         });
     };
+
+    exports.configure = function (userOptions) {
+        defaultOptions = extendOptions(userOptions);
+    };
+
 
     window.addEventListener('scroll', function () {
         scrollpoints.forEach(function (elem, index, array) {
