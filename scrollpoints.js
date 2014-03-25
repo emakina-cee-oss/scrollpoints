@@ -43,29 +43,29 @@ Scrollpoints = (function (undefined) {
 
 
     var entering = function (e) {
-        if (e.reversed) return !e.done && windowTopPos() < elementEnd(e.element) - e.offset;
-        return !e.done && windowBottomPos() > elementBegin(e.element) + e.offset;
+        if (e.reversed) return !e.done && windowTopPos() <= elementEnd(e.element) - e.offset;
+        return !e.done && windowBottomPos() >= elementBegin(e.element) + e.offset;
     };
 
     var entered = function (e, overrideReversed) {
 
         var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
 
-        if (reversed) return !e.done && windowTopPos() < elementBegin(e.element) - e.offset;
-        return !e.done && windowBottomPos() > elementEnd(e.element) + e.offset;
+        if (reversed) return !e.done && windowTopPos() <= elementBegin(e.element) - e.offset;
+        return !e.done && windowBottomPos() >= elementEnd(e.element) + e.offset;
     };
 
     var leaving = function (e) {
-        if (e.reversed) return !e.done && windowBottomPos() < elementEnd(e.element) - e.offset;
-        return !e.done && windowTopPos() > elementBegin(e.element) + e.offset;
+        if (e.reversed) return !e.done && windowBottomPos() <= elementEnd(e.element) - e.offset;
+        return !e.done && windowTopPos() >= elementBegin(e.element) + e.offset;
     };
 
     var left = function (e, overrideReversed, real) {
 
         var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
 
-        if (reversed) return !e.done && windowBottomPos() < elementBegin(e.element) - e.offset;
-        return !e.done && windowTopPos() > elementEnd(e.element) + e.offset;
+        if (reversed) return !e.done && windowBottomPos() <= elementBegin(e.element) - e.offset;
+        return !e.done && windowTopPos() >= elementEnd(e.element) + e.offset;
     };
 
 
@@ -118,11 +118,17 @@ Scrollpoints = (function (undefined) {
                 elem.done = true;
 
                 if (!elem.once) {
-                    if(elem.when === 'entered' || elem.when === 'entering') {
-                        exports.add(elem.element, function () { elem.done = false; }, {when: 'left', reversed: !elem.reversed});
+                    if (elem.when === 'entered') {
+                        exports.add(elem.element, function () { elem.done = false; }, {when: 'leaving', reversed: !elem.reversed}); // entered = lower edge = reverse leaving
                     }
-                    if(elem.when === 'left' || elem.when === 'leaving') {
-                        exports.add(elem.element, function () { elem.done = false; }, {when: 'entered', reversed: !elem.reversed});
+                    if (elem.when === 'entering') {
+                        exports.add(elem.element, function () { elem.done = false; }, {when: 'left', reversed: !elem.reversed}); // entering = upper edge = reverse left
+                    }
+                    if (elem.when === 'left') {
+                        exports.add(elem.element, function () { elem.done = false; }, {when: 'entering', reversed: !elem.reversed}); // left = lower edge = reverse entering
+                    }
+                    if (elem.when === 'leaving') {
+                        exports.add(elem.element, function () { elem.done = false; }, {when: 'entered', reversed: !elem.reversed}); // leaving = upper edge = reverse entered
                     }
                 }
             }
