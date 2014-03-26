@@ -1,4 +1,5 @@
 var Scrollpoints = (function (undefined) {
+    "use strict";
 
     var exports = {};
     var scrollpoints = [];
@@ -71,7 +72,7 @@ var Scrollpoints = (function (undefined) {
 
     exports.add = function (domElement, callback, options) {
         var opts = extendOptions(options);
-        
+
         // reversed elements are inactive initially. Scrollpoints which trigger on 'left' or 'leave' will
         // be activated once they entered the screen, those who trigger on 'entered' or 'entering' once they left the screen.
         var activeInitially = true;
@@ -90,7 +91,7 @@ var Scrollpoints = (function (undefined) {
             when: opts.when,
             offset: opts.offset,
 
-            active: activeInitially, 
+            active: activeInitially,
             done: false
         });
     };
@@ -108,9 +109,9 @@ var Scrollpoints = (function (undefined) {
                 elem.active = true;
             }
 
-            var shouldFire =    elem.when === 'entered' && entered(elem) || 
-                                elem.when === 'entering' && entering(elem) || 
-                                elem.when === 'leaving' && leaving(elem) || 
+            var shouldFire =    elem.when === 'entered' && entered(elem) ||
+                                elem.when === 'entering' && entering(elem) ||
+                                elem.when === 'leaving' && leaving(elem) ||
                                 elem.when === 'left' && left(elem);
 
             if (elem.active && shouldFire) {
@@ -139,3 +140,6 @@ var Scrollpoints = (function (undefined) {
     return exports;
 
 })();
+
+if (module && module.exports) module.exports = Scrollpoints;
+if (exports) exports = Scrollpoints;
