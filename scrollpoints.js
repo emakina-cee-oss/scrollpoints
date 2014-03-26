@@ -1,4 +1,4 @@
-Scrollpoints = (function (undefined) {
+var Scrollpoints = (function (undefined) {
 
     var exports = {};
     var scrollpoints = [];
