@@ -1,7 +1,12 @@
 {
-  "name": "Scrollpoints.js",
-  "version": "0.0.0",
+  "author": "Ferdinand Torggler",
+  "name": "scrollpoints",
   "description": "Scroll callbacks for DOM Elements",
+  "version": "0.1.0",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/the-diamond-dogs-group-oss/scrollpoints"
+  },
   "main": "scrollpoints.js",
   "dependencies": {},
   "devDependencies": {
@@ -10,7 +15,10 @@
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-watch": "~0.5.3"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/the-diamond-dogs-group-oss/scrollpoints/blob/master/LICENSE.MIT"
+    }
+  ]
 }
