@@ -5,6 +5,13 @@ element enters or leaves the screen.
 It behaves similar to the [jQuery Waypoints](https://github.com/imakewebthings/jquery-waypoints)
 plugin, but does not depend on jQuery and is very small in size ( < 2KB).
 
+## Installation
+Scrollpoints is available as npm module and bower component.
+
+If you are using npm, call `npm install scrollpoints --save` to download the scrollpoints module and to add it to your `package.json` file. To use it with browserify, require it like this: `var Scrollpoints = require('scrollpoints');`
+
+Using bower, simply install it with `bower install scrollpoints` and include the scrollpoints.js or scrollpoints.min.js file.
+
 ## Documentation
 ### Adding a new scrollpoint
 To add a new scroll-handler function to a specific DOM-element, Scrollpoints provides the `add`
