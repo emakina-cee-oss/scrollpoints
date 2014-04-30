@@ -70,38 +70,7 @@ var Scrollpoints = (function (undefined) {
     };
 
 
-    exports.add = function (domElement, callback, options) {
-        var opts = extendOptions(options);
-
-        // reversed elements are inactive initially. Scrollpoints which trigger on 'left' or 'leave' will
-        // be activated once they entered the screen, those who trigger on 'entered' or 'entering' once they left the screen.
-        var activeInitially = true;
-
-        if ((opts.when === 'entered' || opts.when === 'entering') && opts.reversed ||
-            (opts.when === 'left' || opts.when === 'leaving') && opts.reversed) {
-            activeInitially = false;
-        }
-
-        scrollpoints.push({
-            element: domElement,
-            callback: callback,
-
-            once: opts.once,
-            reversed: opts.reversed,
-            when: opts.when,
-            offset: opts.offset,
-
-            active: activeInitially,
-            done: false
-        });
-    };
-
-    exports.configure = function (userOptions) {
-        defaultOptions = extendOptions(userOptions);
-    };
-
-
-    window.addEventListener('scroll', function () {
+    var executeScrollpoints = function () {
         scrollpoints.forEach(function (elem, index, array) {
 
             if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && entered(elem, false) ||
@@ -135,7 +104,41 @@ var Scrollpoints = (function (undefined) {
             }
 
         });
-    });
+    };
+
+    exports.add = function (domElement, callback, options) {
+        var opts = extendOptions(options);
+
+        // reversed elements are inactive initially. Scrollpoints which trigger on 'left' or 'leave' will
+        // be activated once they entered the screen, those who trigger on 'entered' or 'entering' once they left the screen.
+        var activeInitially = true;
+
+        if ((opts.when === 'entered' || opts.when === 'entering') && opts.reversed ||
+            (opts.when === 'left' || opts.when === 'leaving') && opts.reversed) {
+            activeInitially = false;
+        }
+
+        scrollpoints.push({
+            element: domElement,
+            callback: callback,
+
+            once: opts.once,
+            reversed: opts.reversed,
+            when: opts.when,
+            offset: opts.offset,
+
+            active: activeInitially,
+            done: false
+        });
+
+        executeScrollpoints();
+    };
+
+    exports.configure = function (userOptions) {
+        defaultOptions = extendOptions(userOptions);
+    };
+
+    window.addEventListener('scroll', executeScrollpoints);
 
     return exports;
 
