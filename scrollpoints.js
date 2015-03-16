@@ -88,20 +88,22 @@ var Scrollpoints = (function (undefined) {
                 elem.callback.call(window, elem.element);
                 elem.done = true;
 
-                if (!elem.once) {
-                    if (elem.when === 'entered') {
-                        exports.add(elem.element, function () { elem.done = false; }, {when: 'leaving', reversed: !elem.reversed}); // entered = lower edge = reverse leaving
+                setTimeout(function () {
+                    if (!elem.once) {
+                        if (elem.when === 'entered') {
+                            exports.add(elem.element, function () { elem.done = false; }, {when: 'leaving', reversed: !elem.reversed}); // entered = lower edge = reverse leaving
+                        }
+                        if (elem.when === 'entering') {
+                            exports.add(elem.element, function () { elem.done = false; }, {when: 'left', reversed: !elem.reversed}); // entering = upper edge = reverse left
+                        }
+                        if (elem.when === 'left') {
+                            exports.add(elem.element, function () { elem.done = false; }, {when: 'entering', reversed: !elem.reversed}); // left = lower edge = reverse entering
+                        }
+                        if (elem.when === 'leaving') {
+                            exports.add(elem.element, function () { elem.done = false; }, {when: 'entered', reversed: !elem.reversed}); // leaving = upper edge = reverse entered
+                        }
                     }
-                    if (elem.when === 'entering') {
-                        exports.add(elem.element, function () { elem.done = false; }, {when: 'left', reversed: !elem.reversed}); // entering = upper edge = reverse left
-                    }
-                    if (elem.when === 'left') {
-                        exports.add(elem.element, function () { elem.done = false; }, {when: 'entering', reversed: !elem.reversed}); // left = lower edge = reverse entering
-                    }
-                    if (elem.when === 'leaving') {
-                        exports.add(elem.element, function () { elem.done = false; }, {when: 'entered', reversed: !elem.reversed}); // leaving = upper edge = reverse entered
-                    }
-                }
+                });
             }
 
         });
