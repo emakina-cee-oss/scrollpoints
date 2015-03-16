@@ -1,0 +1,26 @@
+{
+  "name": "scrollpoints",
+  "main": "scrollpoints.js",
+  "version": "0.3.0",
+  "homepage": "https://github.com/the-diamond-dogs-group-oss/scrollpoints",
+  "authors": [
+    "Ferdinand Torggler <ferdinand.torggler@gmail.com>"
+  ],
+  "description": "Scroll callbacks for DOM Elements",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "scroll",
+    "callbacks"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
