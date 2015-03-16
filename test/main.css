@@ -21,6 +21,23 @@ html, body {
 
 .mini-height {
 	height: 300px;
+	position: relative;	
+}
+
+.absolute {
+	position: absolute;	
+	top: 30px;	
+	right: 30px;
+	bottom: 30px;	
+	width: 100px;
+	background-color: green;
+	-webkit-transition: right .2s ease-out;
+	-o-transition: right .2s ease-out;
+	transition: right .2s ease-out;
+}
+
+.absolute-triggered {
+	right: 200px;
 }
 
 /*

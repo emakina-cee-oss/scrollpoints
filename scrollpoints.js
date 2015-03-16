@@ -26,20 +26,20 @@ var Scrollpoints = (function (undefined) {
         return combined;
     };
 
-    var elementBegin = function (domElement) {
-        return domElement.offsetTop;
-    };
-
-    var elementEnd = function (domElement) {
-        return elementBegin(domElement) + domElement.offsetHeight;
-    };
-
     var windowTopPos = function () {
-        return (window.scrollY || document.documentElement.scrollTop);
+        return document.body.scrollTop;
     };
 
     var windowBottomPos = function () {
         return windowTopPos() + window.innerHeight;
+    };
+
+    var elementBegin = function (domElement) {
+        return domElement.getBoundingClientRect().top + windowTopPos();
+    };
+
+    var elementEnd = function (domElement) {
+        return elementBegin(domElement) + domElement.offsetHeight;
     };
 
 
@@ -82,6 +82,7 @@ var Scrollpoints = (function (undefined) {
                                 elem.when === 'entering' && entering(elem) ||
                                 elem.when === 'leaving' && leaving(elem) ||
                                 elem.when === 'left' && left(elem);
+
 
             if (elem.active && shouldFire) {
                 elem.callback.call(window, elem.element);
