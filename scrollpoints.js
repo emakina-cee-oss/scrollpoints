@@ -25,6 +25,10 @@ var Scrollpoints = (function (undefined) {
         }
         return combined;
     };
+    
+    var isRendered = function (domElement) {
+        return (domElement.offsetWidth > 0 || domElement.offsetHeight > 0);
+    };
 
     var windowTopPos = function () {
         return document.body.scrollTop;
@@ -72,6 +76,9 @@ var Scrollpoints = (function (undefined) {
 
     var executeScrollpoints = function () {
         scrollpoints.forEach(function (elem, index, array) {
+            if (!isRendered(elem.element)) {
+                return;
+            }
 
             if (!elem.active && (elem.when === 'leaving' || elem.when === 'left') && entered(elem, false) ||
                 !elem.active && (elem.when === 'entering' || elem.when === 'entered') && left(elem, false)) {

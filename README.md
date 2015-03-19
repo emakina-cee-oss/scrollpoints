@@ -3,7 +3,7 @@
 Scrollpoints lets you watch specific DOM-elements and fires a callback when an
 element enters or leaves the screen.
 It behaves similar to the [jQuery Waypoints](https://github.com/imakewebthings/jquery-waypoints)
-plugin, but does not depend on jQuery and is very small in size ( < 2KB).
+plugin, but does not depend on jQuery and is very small in size (~2KB).
 
 ## Installation
 Scrollpoints is available as npm module and bower component.
