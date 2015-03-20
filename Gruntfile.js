@@ -3,6 +3,9 @@ module.exports = function (grunt) {
 
         jshint: {
             dist: {
+                options: {
+                    jshintrc: true
+                },
                 files: {
                     src: ['scrollpoints.js']
                 },
@@ -30,4 +33,4 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['jshint', 'uglify', 'watch']);
-}
+};

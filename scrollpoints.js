@@ -1,5 +1,5 @@
 var Scrollpoints = (function (undefined) {
-    "use strict";
+    'use strict';
 
     var exports = {};
     var scrollpoints = [];
@@ -25,9 +25,16 @@ var Scrollpoints = (function (undefined) {
         }
         return combined;
     };
-    
+
     var isRendered = function (domElement) {
         return (domElement.offsetWidth > 0 || domElement.offsetHeight > 0);
+    };
+
+    var oppositeDirectionOf = function (direction) {
+        if (direction === 'entered') { return 'leaving'; }
+        if (direction === 'entering') { return 'left'; }
+        if (direction === 'left') { return 'entering'; }
+        if (direction === 'leaving') { return 'entered'; }
     };
 
     var windowTopPos = function () {
@@ -48,7 +55,9 @@ var Scrollpoints = (function (undefined) {
 
 
     var entering = function (e) {
-        if (e.reversed) return !e.done && windowTopPos() <= elementEnd(e.element) - e.offset;
+        if (e.reversed) {
+            return !e.done && windowTopPos() <= elementEnd(e.element) - e.offset;
+        }
         return !e.done && windowBottomPos() >= elementBegin(e.element) + e.offset;
     };
 
@@ -56,26 +65,32 @@ var Scrollpoints = (function (undefined) {
 
         var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
 
-        if (reversed) return !e.done && windowTopPos() <= elementBegin(e.element) - e.offset;
+        if (reversed) {
+            return !e.done && windowTopPos() <= elementBegin(e.element) - e.offset;
+        }
         return !e.done && windowBottomPos() >= elementEnd(e.element) + e.offset;
     };
 
     var leaving = function (e) {
-        if (e.reversed) return !e.done && windowBottomPos() <= elementEnd(e.element) - e.offset;
+        if (e.reversed) {
+            return !e.done && windowBottomPos() <= elementEnd(e.element) - e.offset;
+        }
         return !e.done && windowTopPos() >= elementBegin(e.element) + e.offset;
     };
 
-    var left = function (e, overrideReversed, real) {
+    var left = function (e, overrideReversed) {
 
         var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
 
-        if (reversed) return !e.done && windowBottomPos() <= elementBegin(e.element) - e.offset;
+        if (reversed) {
+            return !e.done && windowBottomPos() <= elementBegin(e.element) - e.offset;
+        }
         return !e.done && windowTopPos() >= elementEnd(e.element) + e.offset;
     };
 
 
     var executeScrollpoints = function () {
-        scrollpoints.forEach(function (elem, index, array) {
+        scrollpoints.forEach(function (elem) {
             if (!isRendered(elem.element)) {
                 return;
             }
@@ -95,20 +110,12 @@ var Scrollpoints = (function (undefined) {
                 elem.callback.call(window, elem.element);
                 elem.done = true;
 
-                setTimeout(function () {
+                setTimeout(function () { // modify array after forEach finishes.
                     if (!elem.once) {
-                        if (elem.when === 'entered') {
-                            exports.add(elem.element, function () { elem.done = false; }, {when: 'leaving', reversed: !elem.reversed}); // entered = lower edge = reverse leaving
-                        }
-                        if (elem.when === 'entering') {
-                            exports.add(elem.element, function () { elem.done = false; }, {when: 'left', reversed: !elem.reversed}); // entering = upper edge = reverse left
-                        }
-                        if (elem.when === 'left') {
-                            exports.add(elem.element, function () { elem.done = false; }, {when: 'entering', reversed: !elem.reversed}); // left = lower edge = reverse entering
-                        }
-                        if (elem.when === 'leaving') {
-                            exports.add(elem.element, function () { elem.done = false; }, {when: 'entered', reversed: !elem.reversed}); // leaving = upper edge = reverse entered
-                        }
+                        // add a scrollpoint which triggers at the opposite position and reactivates the current one.
+                        // example: A scrollpoint triggers when leaving at the top of the screen, is then temporarily
+                        // deactivated and gets reactivated when the element comes back in from the top (its lower edge)
+                        exports.add(elem.element, function () { elem.done = false; }, {when: oppositeDirectionOf(elem.when), reversed: !elem.reversed});
                     }
                 });
             }
@@ -154,5 +161,11 @@ var Scrollpoints = (function (undefined) {
 
 })();
 
-if (module && module.exports) module.exports = Scrollpoints;
-if (exports) exports = Scrollpoints;
+
+// For use with browserify
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Scrollpoints;
+}
+if (typeof exports !== 'undefined') {
+    exports = Scrollpoints;
+}
