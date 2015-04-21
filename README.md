@@ -49,6 +49,14 @@ Scrollpoints.add(elem, function(domElement) {
 }, config);
 ```
 
+Scrollpoints follows the singleton design pattern. As such you may need to reinitialize the module. Use the `destroy` method before calling `add` again.
+
+```javascript
+Scrollpoints.destroy().add(elem, function(domElement) {
+    // ...
+}, config);
+```
+
 ### Options
 
 Options are per-element configurations to cause the plugin to behave differently. Add
