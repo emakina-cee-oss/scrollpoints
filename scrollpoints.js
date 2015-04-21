@@ -151,6 +151,11 @@ var Scrollpoints = (function (undefined) {
         executeScrollpoints();
     };
 
+    exports.destroy = function() {
+        scrollpoints = [];
+        return exports;
+    };
+
     exports.configure = function (userOptions) {
         defaultOptions = extendOptions(userOptions);
     };
