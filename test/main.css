@@ -24,6 +24,11 @@ html, body {
 	position: relative;	
 }
 
+.nano-height {
+	height: 60px;
+	position: relative;
+}
+
 .absolute {
 	position: absolute;	
 	top: 30px;	
@@ -44,12 +49,10 @@ html, body {
 	SOME RANDOM COLORS
 */
 
-.blue {
-	background-color: #4E8EAD;
-}
-.red {
-	background-color: #B34848;
-}
-.green {
-	background-color: #3D6D43;
-}
+.cornflowerblue { background-color: cornflowerblue; }
+.red { background-color: red; }
+.darkgreen { background-color: darkgreen; }
+.deeppink { background-color: deeppink; }
+.linen { background-color: linen; }
+.cyan { background-color: cyan; }
+.yellow { background-color: yellow; }
