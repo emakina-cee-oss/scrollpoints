@@ -6,14 +6,18 @@
 	<link rel="stylesheet" href="main.css">
 </head>
 <body>
-
-	<section class="mega-height blue">Scroll down!</section>
+	<header class="nano-height cornflowerblue">
+		<p><b>Scroll down &darr;</b></p>
+		<p>I turn <span class="linen">linen</span> when I'm entering from below</p>
+		<p>I turn <span class="deeppink">deeppink</span> when I'm entered from below and my top position is less than or equal to zero</p>
+	</header>
+	<section class="mega-height cornflowerblue"></section>
 	<section class="mini-height">
-        <p>I will turn red when fully visible</p>
-        <p>and blue when 300px inside of the screen</p>
-        <p>I turn yellow when you scroll too far and I start to leave the screen.</p>
-        <p>When I start leaving the screen at the bottom edge, I will turn red again.</p>
-        <p>You can repeat the toggling between yellow and red as often as you want by scrolling up and down, but I won't turn blue again.</p>
+        <p>I will turn <span class="red">red</span> when fully visible</p>
+        <p>and <span class="cyan">cyan</span> when 300px inside of the screen</p>
+        <p>I turn <span class="yellow">yellow</span> when you scroll too far and I start to leave the screen.</p>
+        <p>When I start leaving the screen at the bottom edge, I will turn <span class="red">red</span> again.</p>
+        <p>You can repeat the toggling between <span class="yellow">yellow</span> and <span class="red">red</span> as often as you want by scrolling up and down, but I won't turn <span class="cyan">cyan</span> again.</p>
         <div class="absolute">
             Nested absolute positioning.
             Will move to the left when fully visible.
@@ -25,7 +29,24 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-        var sections = document.getElementsByTagName('section');
+        var sections = document.getElementsByTagName('section'),
+			header = document.getElementsByTagName('header')[0];
+
+	    Scrollpoints.add(header, function(elem) {
+		    elem.style.backgroundColor = 'deeppink';
+	    }, {
+		    when: 'entered',
+		    reversed: true,
+		    once: false
+	    });
+
+	    Scrollpoints.add(header, function(elem) {
+		    elem.style.backgroundColor = 'linen';
+	    }, {
+		    when: 'entering',
+		    reversed: true,
+		    once: false
+	    });
 
         Scrollpoints.add(sections[1], function(elem) {
             elem.style.backgroundColor = 'red';

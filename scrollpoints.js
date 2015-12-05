@@ -66,7 +66,7 @@ var Scrollpoints = (function (undefined) {
         var reversed = overrideReversed === undefined ? e.reversed : overrideReversed;
 
         if (reversed) {
-            return !e.done && windowTopPos() <= elementBegin(e.element) - e.offset;
+            return !e.done && ((windowTopPos() <= elementBegin(e.element) - e.offset) || windowTopPos() === 0);
         }
         return !e.done && windowBottomPos() >= elementEnd(e.element) + e.offset;
     };
